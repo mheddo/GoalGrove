@@ -1,10 +1,30 @@
-import { Button, ButtonText } from '@/components/ui/button';
-import { View, Text } from 'react-native';
+import { useAppSelector } from '@/src/app/hooks';
+import { Link } from 'expo-router';
+import { View, Text, FlatList, Pressable } from 'react-native';
 
 export default function HomeScreen() {
+	const goals = useAppSelector((state) => state.goals.goals);
+
 	return (
-		<Button>
-			<ButtonText>Click Me</ButtonText>
-		</Button>
+		<View>
+			<Text>Your Goals</Text>
+			<FlatList
+				data={goals}
+				keyExtractor={(item) => item.id}
+				renderItem={({ item }) => (
+					<Link
+						href={`/goal/${item.id}`}
+						asChild
+					>
+						<Pressable>
+							<Text>{item.title}</Text>
+						</Pressable>
+					</Link>
+				)}
+				ListEmptyComponent={
+					<Text>No goals yet! Add some goals to get started.</Text>
+				}
+			/>
+		</View>
 	);
 }
